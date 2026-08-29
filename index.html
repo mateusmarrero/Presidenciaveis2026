@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panorama Presidencial 2026 — Análise de Trajetórias e Processos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F3EE;
+    --paper-2:#EDEAE1;
+    --ink:#14181F;
+    --navy:#1D3557;
+    --navy-2:#152841;
+    --blue:#3B6EA5;
+    --gold:#B8862B;
+    --line:#D8D3C6;
+    --arquivado:#4C7A5E;
+    --anulado:#8A8578;
+    --suspenso:#B8862B;
+    --andamento:#A6432E;
+  }
+  *{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;
+  }
+  .font-display{font-family:'Source Serif 4',Georgia,serif;}
+  .font-mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  .hairline{border-color:var(--line);}
+  .paper-texture{
+    background-image: radial-gradient(circle at 1px 1px, rgba(20,24,31,0.035) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  .masthead-rule{
+    border-top:3px solid var(--ink);
+    border-bottom:1px solid var(--ink);
+    height:6px;
+  }
+  .tab-btn{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:0.55rem 0.9rem;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    transition:all .15s ease;
+    cursor:pointer;
+  }
+  .tab-btn:hover{border-color:var(--navy);}
+  .tab-btn.active{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:var(--paper);
+  }
+  .status-bar{display:flex;height:8px;width:100%;overflow:hidden;border-radius:2px;}
+  .status-badge{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.03em;
+    padding:0.2rem 0.55rem;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    gap:0.35rem;
+    white-space:nowrap;
+  }
+  .dot{width:7px;height:7px;border-radius:999px;display:inline-block;}
+  .candidate-card{
+    background:#fff;
+    border:1px solid var(--line);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .candidate-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px -14px rgba(20,24,31,0.28);
+  }
+  .drop-cap:first-letter{
+    font-family:'Source Serif 4',serif;
+    float:left;
+    font-size:3.4rem;
+    line-height:0.82;
+    padding-right:0.35rem;
+    padding-top:0.1rem;
+    color:var(--navy);
+    font-weight:700;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--blue);
+  }
+  table.data-table th{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:#5a5647;
+  }
+  table.data-table td, table.data-table th{
+    border-bottom:1px solid var(--line);
+    padding:0.85rem 1rem;
+    vertical-align:top;
+  }
+  table.data-table tbody tr:hover{background:rgba(59,110,165,0.05);}
+  .fade-row{transition:opacity .2s ease, max-height .2s ease;}
+  .hidden-row{display:none;}
+  ::selection{background:var(--gold);color:#fff;}
+  .marker-line{position:relative;padding-left:1.1rem;}
+  .marker-line::before{
+    content:"";
+    position:absolute;left:0;top:0.4rem;bottom:0.15rem;
+    width:2px;background:var(--line);
+  }
+  .marker-dot{
+    position:absolute;left:-4px;top:0.28rem;
+    width:10px;height:10px;border-radius:999px;
+    background:var(--navy);border:2px solid var(--paper);
+  }
+  .photo-placeholder{
+    width:56px;height:56px;flex-shrink:0;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--navy), var(--blue));
+    color:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.78rem;font-weight:600;letter-spacing:0.02em;
+    border:1px solid var(--line);
+  }
+</style>
+</head>
+<body class="paper-texture">
+
+<!-- ===================== MASTHEAD ===================== -->
+<header class="border-b hairline">
+  <div class="max-w-6xl mx-auto px-5 pt-6 pb-4">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+      <p class="eyebrow">Edição Especial · Eleições Gerais 2026</p>
+      <p class="font-mono text-[0.72rem] text-[#5a5647]" id="today-tag">Atualizado em Agosto de 2026 · Fontes públicas e jornalísticas</p>
+    </div>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[0.98]">
+      Panorama Presidencial 2026
+    </h1>
+    <p class="font-display italic text-lg sm:text-xl mt-2 text-[#3a3628]">Análise de Trajetórias e Processos</p>
+    <div class="masthead-rule mt-4"></div>
+    <p class="max-w-3xl mt-4 text-[0.95rem] leading-relaxed text-[#2b2f37]">
+      Este portal reúne, de forma comparativa e não partidária, dados de acesso público sobre a trajetória política
+      e o histórico de processos, inquéritos e decisões judiciais envolvendo os principais nomes na disputa pela
+      Presidência da República em 2026. As informações têm caráter informativo, foram compiladas a partir de
+      cobertura jornalística e de tribunais superiores, e não representam juízo de valor sobre culpa ou inocência —
+      distinções entre condenação definitiva, anulação por vício processual, prescrição e arquivamento são
+      explicitadas ao longo do conteúdo.
+    </p>
+  </div>
+  <nav class="border-t hairline bg-white/60">
+    <div class="max-w-6xl mx-auto px-5 flex flex-wrap gap-x-6 gap-y-1 py-2 font-mono text-[0.72rem] uppercase tracking-wider text-[#3a3628]">
+      <a href="#panorama" class="hover:text-[var(--navy)]">Panorama</a>
+      <a href="#candidatos" class="hover:text-[var(--navy)]">Candidatos</a>
+      <a href="#tabela" class="hover:text-[var(--navy)]">Tabela comparativa</a>
+      <a href="#metodologia" class="hover:text-[var(--navy)]">Metodologia &amp; fontes</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ===================== FILTRO GLOBAL ===================== -->
+<div class="max-w-6xl mx-auto px-5 mt-6 flex flex-wrap items-center gap-2" id="filter-bar">
+  <span class="font-mono text-[0.7rem] uppercase tracking-wider text-[#5a5647] mr-1">Filtrar por candidato:</span>
+  <button class="tab-btn active" data-filter="todos">Todos</button>
+  <button class="tab-btn" data-filter="lula">Lula</button>
+  <button class="tab-btn" data-filter="flavio">Flávio Bolsonaro</button>
+  <button class="tab-btn" data-filter="caiado">Ronaldo Caiado</button>
+  <button class="tab-btn" data-filter="zema">Romeu Zema</button>
+  <button class="tab-btn" data-filter="renan">Renan Santos</button>
+  <button class="tab-btn" data-filter="cury">Augusto Cury</button>
+</div>
+
+<!-- ===================== GRÁFICOS ===================== -->
+<section id="panorama" class="max-w-6xl mx-auto px-5 mt-10">
+  <p class="eyebrow mb-1">01 · Panorama quantitativo</p>
+  <h2 class="font-display text-2xl sm:text-3xl font-semibold mb-6">Volume e status dos processos por candidato</h2>
+  <div class="grid md:grid-cols-5 gap-6">
+    <div class="md:col-span-3 bg-white border hairline p-5">
+      <h3 class="font-semibold text-sm mb-1">Casos, inquéritos e ações judiciais mais citados na cobertura pública</h3>
+      <p class="text-xs text-[#5a5647] mb-4">Contagem agregada de processos/inquéritos de maior repercussão associados a cada nome, de naturezas distintas (criminal, eleitoral, cível). Não equivale a uma medida de gravidade — ver metodologia.</p>
+      <canvas id="chartBarras" height="230"></canvas>
+    </div>
+    <div class="md:col-span-2 bg-white border hairline p-5">
+      <h3 class="font-semibold text-sm mb-1">Status judicial agregado</h3>
+      <p class="text-xs text-[#5a5647] mb-4">Classificação do conjunto de casos mapeados neste panorama, segundo o desfecho ou fase processual mais recente divulgada publicamente.</p>
+      <canvas id="chartRosca" height="230"></canvas>
+    </div>
+  </div>
+
+  <div class="bg-white border hairline p-5 mt-6">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
+      <h3 class="font-semibold text-sm">Intenção de voto — 1º turno</h3>
+      <p class="font-mono text-[0.68rem] text-[#5a5647] uppercase tracking-wider">PoderData/Aya · 27 ago 2026</p>
+    </div>
+    <p class="text-xs text-[#5a5647] mb-4">2.400 entrevistados (23 a 26/ago/2026) · margem de erro de 2 p.p. · registro TSE nº BR-04974/2026. Lula e Flávio Bolsonaro estão em empate técnico. Outros institutos no mesmo período (ex.: Gerp, 26/ago) mostram cenário tecnicamente equivalente, ora com Flávio à frente — a disputa entre os dois primeiros colocados segue dentro da margem de erro em praticamente todos os levantamentos.</p>
+    <canvas id="chartVotos" height="140"></canvas>
+  </div>
+</section>
+
+<!-- ===================== CARDS ===================== -->
+<section id="candidatos" class="max-w-6xl mx-auto px-5 mt-14">
+  <p class="eyebrow mb-1">02 · Perfis</p>
+  <h2 class="font-display text-2xl sm:text-3xl font-semibold mb-6">Trajetórias e histórico judicial</h2>
+  <div class="grid md:grid-cols-2 gap-6" id="cards-grid">
+
+    <!-- LULA -->
+    <article class="candidate-card p-6" data-candidate="lula">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Luiz Inácio Lula da Silva" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">LU</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Luiz Inácio Lula da Silva</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">PT · Presidente da República (mandato 2023–2026) · candidato à reeleição</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">11</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">38%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:73%;background:var(--arquivado)" title="Arquivado / prescrito"></div>
+        <div style="width:27%;background:var(--suspenso)" title="Suspenso, sem condenação definitiva"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#EAF1EC;color:var(--arquivado)"><span class="dot" style="background:var(--arquivado)"></span>8 arquivados/prescritos</span>
+        <span class="status-badge" style="background:#FBF2E1;color:var(--suspenso)"><span class="dot" style="background:var(--suspenso)"></span>3 suspensos</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> no auge da Operação Lava Jato, Lula respondeu a diversas ações penais. As mais conhecidas envolveram o tríplex do Guarujá, o sítio de Atibaia e recursos ligados ao Instituto Lula.</p>
+        <p><span class="font-semibold">Marco central:</span> em 2021, o STF declarou a suspeição do então juiz Sergio Moro nos processos contra Lula e, na sequência, o ministro Edson Fachin anulou as condenações por entender que a 13ª Vara Federal de Curitiba não tinha competência para julgar os casos, por falta de relação direta com os desvios na Petrobras.</p>
+        <p><span class="font-semibold">Desdobramento:</span> a maior parte das ações foi arquivada, prescreveu ou teve a denúncia rejeitada por insuficiência de provas após a anulação. Permanecem casos ligados ao Instituto Lula e à Operação Zelotes (compra de caças suecos), todos atualmente suspensos por decisão do STF, sem condenação definitiva.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Sem condenação válida em vigor. As condenações anteriores foram anuladas por questões de competência e suspeição do juiz; três processos seguem suspensos, sem julgamento de mérito.</p>
+      </div>
+    </article>
+
+    <!-- FLAVIO -->
+    <article class="candidate-card p-6" data-candidate="flavio">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Flávio Bolsonaro" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">FB</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Flávio Bolsonaro</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">PL · Senador pelo Rio de Janeiro · candidato à Presidência</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">1</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">caso central</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">35%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:100%;background:var(--anulado)" title="Anulado por vício processual"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#EFEDE8;color:var(--anulado)"><span class="dot" style="background:var(--anulado)"></span>1 anulado por questão processual</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> em novembro de 2020, o Ministério Público do Rio de Janeiro denunciou Flávio Bolsonaro por suposta chefia de esquema de "rachadinha" — recolhimento de parte dos salários de ex-assessores na Alerj, durante seu mandato como deputado estadual, no valor estimado de R$ 6 milhões.</p>
+        <p><span class="font-semibold">Marco central:</span> em 2021, a 5ª Turma do STJ anulou as decisões da Justiça carioca no caso por uma questão processual — o direito a foro privilegiado por sua condição de parlamentar. O caso passou a tramitar sob segredo de justiça.</p>
+        <p><span class="font-semibold">Desdobramento:</span> em fevereiro de 2026, o ministro Gilmar Mendes negou recursos do Ministério Público para reabrir a apuração. Sua defesa afirma que não há hoje qualquer inquérito aberto contra ele por ilícito ou malversação de recursos; questões sobre a origem de determinadas movimentações financeiras seguem, segundo reportagens, sem resposta pública conclusiva.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Sem condenação. O processo foi anulado por questão de foro/procedimento, não houve julgamento de mérito, e pedidos de reabertura foram negados pelo STF.</p>
+      </div>
+    </article>
+
+    <!-- CAIADO -->
+    <article class="candidate-card p-6" data-candidate="caiado">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Ronaldo Caiado" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">RC</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Ronaldo Caiado</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">PSD · Governador de Goiás · candidato à Presidência</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">2</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">4%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:50%;background:var(--andamento)" title="Em andamento / recurso"></div>
+        <div style="width:50%;background:var(--suspenso)" title="Sem condenação definitiva"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 em recurso no TSE</span>
+        <span class="status-badge" style="background:#FBF2E1;color:var(--suspenso)"><span class="dot" style="background:var(--suspenso)"></span>1 sem desfecho público</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> em dezembro de 2024, a Justiça Eleitoral de Goiás condenou Caiado em primeira instância por abuso de poder político, relacionado a um evento na residência oficial do governador durante as eleições municipais de 2024, com pena de inelegibilidade de 8 anos.</p>
+        <p><span class="font-semibold">Marco central:</span> a defesa recorreu e nega irregularidade, argumentando ausência de caráter eleitoral no evento. O TRE-GO manteve a condenação; o caso aguarda julgamento final no TSE. A decisão não afeta o mandato atual de governador.</p>
+        <p><span class="font-semibold">Histórico adicional:</span> em 2015, Caiado foi réu em ação por calúnia, injúria e difamação movida por Lula, decorrente de declarações do então senador — processo que chegou ao STF; não há registro público de desfecho amplamente divulgado.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Sem trânsito em julgado. A condenação por abuso de poder político está em fase de recurso no TSE; a inelegibilidade de 8 anos não é definitiva.</p>
+      </div>
+    </article>
+
+    <!-- ZEMA -->
+    <article class="candidate-card p-6" data-candidate="zema">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Romeu Zema" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">RZ</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Romeu Zema</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">Novo · Ex-governador de Minas Gerais · candidato à Presidência</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">1</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">caso mapeado</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">2%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:100%;background:var(--andamento)" title="Em andamento"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 ação cível em andamento</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> ao longo de 2026, Zema intensificou críticas públicas ao STF, chamando ministros de "intocáveis" e defendendo mudanças nas regras de indicação e de responsabilização da Corte.</p>
+        <p><span class="font-semibold">Marco central:</span> como consequência de declarações críticas, Zema tornou-se réu em ação movida pelo ministro Gilmar Mendes, que se considerou caluniado. O próprio candidato citou publicamente o processo ao comentar o episódio.</p>
+        <p><span class="font-semibold">Observação:</span> nas fontes públicas consultadas para este panorama não foram identificados inquéritos ou processos por corrupção, desvio de recursos ou improbidade associados ao seu nome até a data desta análise.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Réu em uma ação cível em andamento, de natureza distinta (calúnia), sem relação com gestão de recursos públicos.</p>
+      </div>
+    </article>
+
+    <!-- RENAN SANTOS -->
+    <article class="candidate-card p-6" data-candidate="renan">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Renan Santos" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">RS</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Renan Santos</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">Missão · fundador do MBL e presidente do partido · candidato à Presidência</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">1</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">caso mapeado</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">4%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:100%;background:var(--andamento)" title="Em andamento"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 representação eleitoral em andamento</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> fundador do Movimento Brasil Livre (MBL) em 2014, Renan Santos ganhou notoriedade nas manifestações de 2013 e nos protestos que pediram o impeachment de Dilma Rousseff, em apoio à Operação Lava Jato. Em 2025, fundou o partido Missão, oficializado como sua legenda para a candidatura à Presidência em 2026.</p>
+        <p><span class="font-semibold">Marco central:</span> em julho de 2026, o diretório do Missão em Pernambuco foi alvo de uma representação no TRE-PE por um vídeo em que Renan Santos chama o pré-candidato João Campos de termos ofensivos; o processo, de natureza eleitoral, ainda tramitava em fase de contestação.</p>
+        <p><span class="font-semibold">Observação:</span> nas fontes públicas consultadas não foram identificados inquéritos criminais ou processos por corrupção associados ao seu nome até a data desta análise.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Sem condenação. Processo de natureza eleitoral (representação por conteúdo ofensivo a adversário) em fase de contestação, sem desfecho definitivo.</p>
+      </div>
+    </article>
+
+    <!-- AUGUSTO CURY -->
+    <article class="candidate-card p-6" data-candidate="cury">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Augusto Cury" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">AC</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Augusto Cury</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">Avante · escritor e psiquiatra · candidato à Presidência (estreia eleitoral)</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">0</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos identificados</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">4%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:100%;background:#D8D3C6" title="Sem casos identificados"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#EFEDE8;color:#5a5647"><span class="dot" style="background:#B0AA98"></span>nenhum processo público identificado</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> psiquiatra e escritor best-seller, com dezenas de livros publicados no Brasil e no exterior, Augusto Cury disputa pela primeira vez um cargo eletivo, pelo partido Avante, com discurso de combate à polarização política.</p>
+        <p><span class="font-semibold">Marco central:</span> por ser estreante na política institucional, não há histórico de mandatos, inquéritos ou ações judiciais amplamente noticiadas associadas ao seu nome. Sua plataforma defende mudanças no STF, como mandato fixo para ministros, e a adoção do semipresidencialismo.</p>
+        <p><span class="font-semibold">Observação:</span> nas fontes públicas consultadas para este panorama não foram identificados processos criminais, eleitorais ou cíveis de repercussão associados ao candidato até a data desta análise.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Nenhum processo ou inquérito de repercussão identificado nas fontes consultadas; primeira candidatura do nome a um cargo eletivo.</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ===================== TABELA ===================== -->
+<section id="tabela" class="max-w-6xl mx-auto px-5 mt-14">
+  <p class="eyebrow mb-1">03 · Comparativo</p>
+  <h2 class="font-display text-2xl sm:text-3xl font-semibold mb-6">Tabela geral</h2>
+  <div class="bg-white border hairline overflow-x-auto">
+    <table class="data-table w-full text-sm" id="tabela-comparativa">
+      <thead>
+        <tr class="text-left">
+          <th>Candidato / Partido</th>
+          <th>Intenção de voto (1º turno)</th>
+          <th>Volume de processos/inquéritos</th>
+          <th>Principais marcos</th>
+          <th>Status jurídico atual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="fade-row" data-candidate="lula">
+          <td class="font-semibold whitespace-nowrap">Lula <span class="block font-mono text-xs text-[#5a5647] font-normal">PT</span></td>
+          <td class="font-mono">38%</td>
+          <td class="font-mono">11 casos (Lava Jato)</td>
+          <td>Tríplex do Guarujá; sítio de Atibaia; Instituto Lula; anulação por suspeição de Moro e incompetência da 13ª Vara Federal.</td>
+          <td>Sem condenação vigente; 3 processos suspensos, sem julgamento de mérito.</td>
+        </tr>
+        <tr class="fade-row" data-candidate="flavio">
+          <td class="font-semibold whitespace-nowrap">Flávio Bolsonaro <span class="block font-mono text-xs text-[#5a5647] font-normal">PL</span></td>
+          <td class="font-mono">35%</td>
+          <td class="font-mono">1 caso ("rachadinha")</td>
+          <td>Denúncia do MP-RJ em 2020; anulação pelo STJ em 2021 por foro privilegiado; pedidos de reabertura negados em 2026.</td>
+          <td>Sem condenação; caso arquivado após anulação processual.</td>
+        </tr>
+        <tr class="fade-row" data-candidate="caiado">
+          <td class="font-semibold whitespace-nowrap">Ronaldo Caiado <span class="block font-mono text-xs text-[#5a5647] font-normal">PSD</span></td>
+          <td class="font-mono">4%</td>
+          <td class="font-mono">2 casos</td>
+          <td>Condenação em 1ª instância por abuso de poder político (dez/2024); mantida pelo TRE-GO; ação cível de Lula em 2015.</td>
+          <td>Em recurso no TSE; inelegibilidade de 8 anos não é definitiva.</td>
+        </tr>
+        <tr class="fade-row" data-candidate="zema">
+          <td class="font-semibold whitespace-nowrap">Romeu Zema <span class="block font-mono text-xs text-[#5a5647] font-normal">Novo</span></td>
+          <td class="font-mono">2%</td>
+          <td class="font-mono">1 caso (cível)</td>
+          <td>Réu em ação por calúnia movida por Gilmar Mendes, após críticas públicas de Zema ao STF.</td>
+          <td>Ação cível em andamento; sem processos por corrupção identificados.</td>
+        </tr>
+        <tr class="fade-row" data-candidate="renan">
+          <td class="font-semibold whitespace-nowrap">Renan Santos <span class="block font-mono text-xs text-[#5a5647] font-normal">Missão</span></td>
+          <td class="font-mono">4%</td>
+          <td class="font-mono">1 caso (eleitoral)</td>
+          <td>Representação no TRE-PE (jul/2026) por vídeo com ofensas a adversário; sem inquéritos criminais identificados.</td>
+          <td>Sem condenação; processo eleitoral em fase de contestação.</td>
+        </tr>
+        <tr class="fade-row" data-candidate="cury">
+          <td class="font-semibold whitespace-nowrap">Augusto Cury <span class="block font-mono text-xs text-[#5a5647] font-normal">Avante</span></td>
+          <td class="font-mono">4%</td>
+          <td class="font-mono">0 casos identificados</td>
+          <td>Estreante na política institucional; sem mandatos ou processos amplamente noticiados até a data desta análise.</td>
+          <td>Nenhum processo ou inquérito de repercussão identificado nas fontes consultadas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== METODOLOGIA ===================== -->
+<section id="metodologia" class="max-w-6xl mx-auto px-5 mt-14 mb-16">
+  <p class="eyebrow mb-1">04 · Metodologia &amp; fontes</p>
+  <h2 class="font-display text-2xl sm:text-3xl font-semibold mb-4">Como este panorama foi construído</h2>
+  <div class="bg-white border hairline p-6 grid md:grid-cols-2 gap-8">
+    <div class="text-sm leading-relaxed text-[#2b2f37] drop-cap">
+      Este levantamento compila casos de ampla repercussão pública, noticiados por veículos de imprensa e por
+      tribunais superiores (STF, STJ, TSE, TRE-GO), sem acesso a bases judiciais completas e sem pretensão de
+      exaustividade. O critério de contagem prioriza processos e inquéritos amplamente citados na cobertura
+      jornalística de cada candidatura, e não uma extração direta de sistemas processuais — por isso os números
+      devem ser lidos como uma aproximação editorial, não como estatística oficial.
+    </div>
+    <div class="text-sm leading-relaxed text-[#2b2f37]">
+      <p class="font-semibold mb-2">Princípios adotados:</p>
+      <ul class="space-y-2 list-disc pl-5">
+        <li>Distinção clara entre condenação com trânsito em julgado, anulação por vício processual, prescrição, arquivamento e processo em andamento.</li>
+        <li>Nenhuma classificação de status implica juízo sobre culpa ou inocência.</li>
+        <li>Casos de natureza distinta (criminal, eleitoral, cível) não são comparáveis em gravidade apenas pelo volume.</li>
+        <li>Fontes: reportagens de CNN Brasil, CartaCapital, Congresso em Foco, Poder360, Gazeta do Povo, JOTA, Terra, NSC Total, InfoMoney, A Pública e comunicados oficiais do STF/TSE, consultados em agosto de 2026.</li>
+        <li>Dados de intenção de voto: pesquisa PoderData/Aya, divulgada em 27/ago/2026 (registro TSE nº BR-04974/2026). Pesquisas eleitorais retratam um momento específico e variam conforme o instituto e a metodologia — os números tendem a mudar ao longo da campanha.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="text-xs text-[#5a5647] mt-4 max-w-3xl">
+    Este é um portal informativo e não substitui consulta direta aos autos processuais ou aconselhamento jurídico.
+    Situações judiciais mudam rapidamente durante o período eleitoral; recomenda-se verificar atualizações junto às
+    fontes oficiais dos tribunais citados. As fotos dos candidatos foram substituídas por iniciais como espaço reservado
+    (ver comentários <code>&lt;!-- FOTO: ... --&gt;</code> no código-fonte de cada card, logo acima de <code>photo-placeholder</code>);
+    para usá-las, insira a tag <code>&lt;img&gt;</code> indicada com a URL de uma foto oficial de cada candidato.
+  </p>
+</section>
+
+<footer class="border-t hairline">
+  <div class="max-w-6xl mx-auto px-5 py-6 flex flex-wrap items-center justify-between gap-2">
+    <p class="font-display text-sm">Panorama Presidencial 2026</p>
+    <p class="font-mono text-[0.68rem] text-[#5a5647] uppercase tracking-wider">Conteúdo informativo · Apartidário · Eleições Gerais 2026</p>
+  </div>
+</footer>
+
+<script>
+  // ---------- Dados agregados ----------
+  const dataBarras = {
+    labels: ['Lula (PT)', 'Flávio Bolsonaro (PL)', 'Ronaldo Caiado (PSD)', 'Romeu Zema (Novo)', 'Renan Santos (Missão)', 'Augusto Cury (Avante)'],
+    values: [11, 1, 2, 1, 1, 0],
+    colors: ['#1D3557', '#3B6EA5', '#8A8578', '#B8862B', '#A6432E', '#B0AA98']
+  };
+
+  const dataRosca = {
+    labels: ['Arquivado / prescrito', 'Suspenso, sem condenação definitiva', 'Anulado por vício processual', 'Em andamento / recurso'],
+    values: [8, 4, 1, 3],
+    colors: ['#4C7A5E', '#B8862B', '#8A8578', '#A6432E']
+  };
+
+  const dataVotos = {
+    labels: ['Lula (PT)', 'Flávio Bolsonaro (PL)', 'Ronaldo Caiado (PSD)', 'Renan Santos (Missão)', 'Augusto Cury (Avante)', 'Romeu Zema (Novo)'],
+    values: [38, 35, 4, 4, 4, 2],
+    colors: ['#1D3557', '#3B6EA5', '#8A8578', '#A6432E', '#B0AA98', '#B8862B']
+  };
+
+  const ctxBarras = document.getElementById('chartBarras').getContext('2d');
+  new Chart(ctxBarras, {
+    type: 'bar',
+    data: {
+      labels: dataBarras.labels,
+      datasets: [{
+        label: 'Casos mapeados',
+        data: dataBarras.values,
+        backgroundColor: dataBarras.colors,
+        borderRadius: 3,
+        maxBarThickness: 56
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 2, font: { family: 'IBM Plex Mono', size: 11 } }, grid: { color: '#E4E0D4' } },
+        x: { ticks: { font: { family: 'IBM Plex Mono', size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  const ctxRosca = document.getElementById('chartRosca').getContext('2d');
+  new Chart(ctxRosca, {
+    type: 'doughnut',
+    data: {
+      labels: dataRosca.labels,
+      datasets: [{
+        data: dataRosca.values,
+        backgroundColor: dataRosca.colors,
+        borderColor: '#F5F3EE',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '62%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { boxWidth: 10, font: { family: 'IBM Plex Sans', size: 10.5 }, padding: 12 }
+        }
+      }
+    }
+  });
+
+  const ctxVotos = document.getElementById('chartVotos').getContext('2d');
+  new Chart(ctxVotos, {
+    type: 'bar',
+    data: {
+      labels: dataVotos.labels,
+      datasets: [{
+        label: 'Intenção de voto (%)',
+        data: dataVotos.values,
+        backgroundColor: dataVotos.colors,
+        borderRadius: 3,
+        maxBarThickness: 46
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, max: 45, ticks: { callback: v => v + '%', font: { family: 'IBM Plex Mono', size: 11 } }, grid: { color: '#E4E0D4' } },
+        y: { ticks: { font: { family: 'IBM Plex Mono', size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // ---------- Filtro por candidato ----------
+  const buttons = document.querySelectorAll('.tab-btn');
+  const cards = document.querySelectorAll('#cards-grid > article');
+  const rows = document.querySelectorAll('#tabela-comparativa tbody tr');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+
+      cards.forEach(card => {
+        card.style.display = (filter === 'todos' || card.dataset.candidate === filter) ? '' : 'none';
+      });
+      rows.forEach(row => {
+        row.style.display = (filter === 'todos' || row.dataset.candidate === filter) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>
