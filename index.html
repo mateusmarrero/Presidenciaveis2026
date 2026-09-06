@@ -25,6 +25,7 @@
     --anulado:#8A8578;
     --suspenso:#B8862B;
     --andamento:#A6432E;
+    --revertido:#2F7A99;
   }
   *{scroll-behavior:smooth;}
   body{
@@ -168,11 +169,24 @@
     transition:background .15s ease;
   }
   .btn-solid-green:hover{background:#00782d;}
+  .status-dot{
+    width:8px;height:8px;border-radius:999px;
+    background:var(--arquivado);
+    display:inline-block;
+    animation:pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot{
+    0%{opacity:1;} 50%{opacity:0.35;} 100%{opacity:1;}
+  }
+  #floating-status-bar{
+    box-shadow:0 8px 22px -8px rgba(20,24,31,0.45);
+  }
 </style>
 </head>
 <body class="paper-texture">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9421145457118515"
      crossorigin="anonymous"></script>
+  
 
 <!-- Faixa decorativa com as cores da bandeira do Brasil -->
 <div class="flex w-full" style="height:5px;">
@@ -186,7 +200,7 @@
   <div class="max-w-6xl mx-auto px-5 pt-6 pb-4">
     <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
       <p class="eyebrow">Edição Especial · Eleições Gerais 2026</p>
-      <p class="font-mono text-[0.72rem] text-[#5a5647]" id="today-tag">Atualizado em Agosto de 2026 · Fontes públicas e jornalísticas</p>
+      <p class="font-mono text-[0.72rem] text-[#5a5647]" id="today-tag">Atualizado em 6 de setembro de 2026 · Fontes públicas e jornalísticas</p>
     </div>
     <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[0.98]">
       Panorama Presidencial 2026
@@ -223,6 +237,7 @@
   <button class="tab-btn" data-filter="zema">Romeu Zema</button>
   <button class="tab-btn" data-filter="renan">Renan Santos</button>
   <button class="tab-btn" data-filter="cury">Augusto Cury</button>
+  <button class="tab-btn" data-filter="marcal">Pablo Marçal</button>
 </div>
 
 <!-- ===================== GRÁFICOS ===================== -->
@@ -311,28 +326,30 @@
               <p class="font-mono text-xs text-[#5a5647] mt-1">PL · Senador pelo Rio de Janeiro · candidato à Presidência</p>
             </div>
             <div class="font-mono text-right">
-              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">1</p>
-              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">caso central</p>
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">3</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
             </div>
           </div>
           <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">35%</span></p>
         </div>
       </div>
       <div class="status-bar mt-4">
-        <div style="width:100%;background:var(--anulado)" title="Anulado por vício processual"></div>
+        <div style="width:34%;background:var(--anulado)" title="Anulado por vício processual"></div>
+        <div style="width:66%;background:var(--andamento)" title="Em andamento no TSE"></div>
       </div>
       <div class="flex flex-wrap gap-2 mt-3">
         <span class="status-badge" style="background:#EFEDE8;color:var(--anulado)"><span class="dot" style="background:var(--anulado)"></span>1 anulado por questão processual</span>
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>2 representações em andamento no TSE</span>
       </div>
       <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
         <div class="marker-dot"></div>
-        <p><span class="font-semibold">Contexto:</span> em novembro de 2020, o Ministério Público do Rio de Janeiro denunciou Flávio Bolsonaro por suposta chefia de esquema de "rachadinha" — recolhimento de parte dos salários de ex-assessores na Alerj, durante seu mandato como deputado estadual, no valor estimado de R$ 6 milhões.</p>
-        <p><span class="font-semibold">Marco central:</span> em 2021, a 5ª Turma do STJ anulou as decisões da Justiça carioca no caso por uma questão processual — o direito a foro privilegiado por sua condição de parlamentar. O caso passou a tramitar sob segredo de justiça.</p>
-        <p><span class="font-semibold">Desdobramento:</span> em fevereiro de 2026, o ministro Gilmar Mendes negou recursos do Ministério Público para reabrir a apuração. Sua defesa afirma que não há hoje qualquer inquérito aberto contra ele por ilícito ou malversação de recursos; questões sobre a origem de determinadas movimentações financeiras seguem, segundo reportagens, sem resposta pública conclusiva.</p>
+        <p><span class="font-semibold">Contexto (rachadinha):</span> em novembro de 2020, o Ministério Público do Rio de Janeiro denunciou Flávio Bolsonaro por suposta chefia de esquema de "rachadinha" — recolhimento de parte dos salários de ex-assessores na Alerj, durante seu mandato como deputado estadual, no valor estimado de R$ 6 milhões.</p>
+        <p><span class="font-semibold">Marco central:</span> em 2021, a 5ª Turma do STJ anulou as decisões da Justiça carioca no caso por uma questão processual — o direito a foro privilegiado por sua condição de parlamentar. O caso passou a tramitar sob segredo de justiça, e em fevereiro de 2026 o ministro Gilmar Mendes negou recursos do Ministério Público para reabrir a apuração.</p>
+        <p><span class="font-semibold">Novidade (ago/2026):</span> a coligação de Lula ajuizou no TSE duas ações contra Flávio. A primeira, uma Ação de Investigação Judicial Eleitoral (AIJE), alega abuso de poder econômico em discurso na Festa do Peão de Barretos (22/ago), classificado pela campanha petista como "showmício disfarçado", e pede a cassação do registro da chapa e a inelegibilidade do senador. A segunda pede a retirada de vídeos com uso de inteligência artificial que associam Lula à palavra "bandido". Ambas as ações estavam em análise pela Justiça Eleitoral até a data desta atualização, sem decisão de mérito.</p>
       </div>
       <div class="mt-5 pt-4 border-t hairline">
         <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
-        <p class="text-sm">Sem condenação. O processo foi anulado por questão de foro/procedimento, não houve julgamento de mérito, e pedidos de reabertura foram negados pelo STF.</p>
+        <p class="text-sm">Sem condenação em nenhum dos casos. O processo da "rachadinha" foi anulado por questão de foro/procedimento; as duas novas representações no TSE (showmício e vídeos com IA) ainda aguardam julgamento, sem decisão sobre cassação ou inelegibilidade até o momento.</p>
       </div>
     </article>
 
@@ -349,7 +366,7 @@
               <p class="font-mono text-xs text-[#5a5647] mt-1">PSD · Governador de Goiás · candidato à Presidência</p>
             </div>
             <div class="font-mono text-right">
-              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">2</p>
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">3</p>
               <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
             </div>
           </div>
@@ -357,22 +374,24 @@
         </div>
       </div>
       <div class="status-bar mt-4">
-        <div style="width:50%;background:var(--andamento)" title="Em andamento / recurso"></div>
-        <div style="width:50%;background:var(--suspenso)" title="Sem condenação definitiva"></div>
+        <div style="width:34%;background:var(--revertido)" title="Revertido por decisão colegiada"></div>
+        <div style="width:33%;background:var(--suspenso)" title="Sem condenação definitiva"></div>
+        <div style="width:33%;background:var(--andamento)" title="Em andamento no TSE"></div>
       </div>
       <div class="flex flex-wrap gap-2 mt-3">
-        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 em recurso no TSE</span>
+        <span class="status-badge" style="background:#E6EEF0;color:var(--revertido)"><span class="dot" style="background:var(--revertido)"></span>1 revertido pelo TRE-GO</span>
         <span class="status-badge" style="background:#FBF2E1;color:var(--suspenso)"><span class="dot" style="background:var(--suspenso)"></span>1 sem desfecho público</span>
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 em andamento no TSE</span>
       </div>
       <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
         <div class="marker-dot"></div>
-        <p><span class="font-semibold">Contexto:</span> em dezembro de 2024, a Justiça Eleitoral de Goiás condenou Caiado em primeira instância por abuso de poder político, relacionado a um evento na residência oficial do governador durante as eleições municipais de 2024, com pena de inelegibilidade de 8 anos.</p>
-        <p><span class="font-semibold">Marco central:</span> a defesa recorreu e nega irregularidade, argumentando ausência de caráter eleitoral no evento. O TRE-GO manteve a condenação; o caso aguarda julgamento final no TSE. A decisão não afeta o mandato atual de governador.</p>
-        <p><span class="font-semibold">Histórico adicional:</span> em 2015, Caiado foi réu em ação por calúnia, injúria e difamação movida por Lula, decorrente de declarações do então senador — processo que chegou ao STF; não há registro público de desfecho amplamente divulgado.</p>
+        <p><span class="font-semibold">Contexto:</span> em dezembro de 2024, a Justiça Eleitoral de Goiás condenou Caiado em primeira instância por abuso de poder político, relacionado a jantares na sede do governo (Palácio das Esmeraldas) durante as eleições municipais de 2024, com pena de inelegibilidade de 8 anos.</p>
+        <p><span class="font-semibold">Marco central:</span> em abril de 2025, o TRE-GO reverteu a decisão por unanimidade, entendendo que os fatos não tinham gravidade suficiente para caracterizar abuso de poder. Não há, portanto, inelegibilidade em vigor decorrente desse processo.</p>
+        <p><span class="font-semibold">Novidade (ago/2026):</span> a coligação de Lula apresentou uma nova representação no TSE contra Caiado por declarações dadas à Rede Globo, em 25/ago, associando o presidente ao narcotráfico; o pedido busca a proibição de novas publicações no mesmo teor. Segue também sem desfecho público a ação de 2015 em que foi réu por calúnia, injúria e difamação, movida por Lula.</p>
       </div>
       <div class="mt-5 pt-4 border-t hairline">
         <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
-        <p class="text-sm">Sem trânsito em julgado. A condenação por abuso de poder político está em fase de recurso no TSE; a inelegibilidade de 8 anos não é definitiva.</p>
+        <p class="text-sm">Sem inelegibilidade em vigor: a condenação por abuso de poder político foi revertida pelo TRE-GO. A nova representação de agosto de 2026 ainda aguarda decisão.</p>
       </div>
     </article>
 
@@ -389,8 +408,8 @@
               <p class="font-mono text-xs text-[#5a5647] mt-1">Novo · Ex-governador de Minas Gerais · candidato à Presidência</p>
             </div>
             <div class="font-mono text-right">
-              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">1</p>
-              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">caso mapeado</p>
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">2</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
             </div>
           </div>
           <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">2%</span></p>
@@ -400,17 +419,17 @@
         <div style="width:100%;background:var(--andamento)" title="Em andamento"></div>
       </div>
       <div class="flex flex-wrap gap-2 mt-3">
-        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 ação cível em andamento</span>
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>2 ações em andamento</span>
       </div>
       <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
         <div class="marker-dot"></div>
         <p><span class="font-semibold">Contexto:</span> ao longo de 2026, Zema intensificou críticas públicas ao STF, chamando ministros de "intocáveis" e defendendo mudanças nas regras de indicação e de responsabilização da Corte.</p>
-        <p><span class="font-semibold">Marco central:</span> como consequência de declarações críticas, Zema tornou-se réu em ação movida pelo ministro Gilmar Mendes, que se considerou caluniado. O próprio candidato citou publicamente o processo ao comentar o episódio.</p>
-        <p><span class="font-semibold">Observação:</span> nas fontes públicas consultadas para este panorama não foram identificados inquéritos ou processos por corrupção, desvio de recursos ou improbidade associados ao seu nome até a data desta análise.</p>
+        <p><span class="font-semibold">Marco central:</span> como consequência de declarações críticas, Zema tornou-se réu em ação cível movida pelo ministro Gilmar Mendes, que se considerou caluniado. O próprio candidato citou publicamente o processo ao comentar o episódio.</p>
+        <p><span class="font-semibold">Novidade (ago/2026):</span> a coligação de Lula apresentou uma representação no TSE contra Zema por replicar, em suas redes, os vídeos com uso de inteligência artificial que associam o presidente à palavra "bandido" — mesmo conteúdo alvo de ação contra Flávio Bolsonaro. O caso aguarda decisão.</p>
       </div>
       <div class="mt-5 pt-4 border-t hairline">
         <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
-        <p class="text-sm">Réu em uma ação cível em andamento, de natureza distinta (calúnia), sem relação com gestão de recursos públicos.</p>
+        <p class="text-sm">Réu em uma ação cível em andamento (calúnia); alvo de uma representação eleitoral adicional no TSE. Nenhum dos dois casos tem relação com gestão de recursos públicos.</p>
       </div>
     </article>
 
@@ -427,8 +446,8 @@
               <p class="font-mono text-xs text-[#5a5647] mt-1">Missão · fundador do MBL e presidente do partido · candidato à Presidência</p>
             </div>
             <div class="font-mono text-right">
-              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">1</p>
-              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">caso mapeado</p>
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">2</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
             </div>
           </div>
           <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">4%</span></p>
@@ -438,17 +457,17 @@
         <div style="width:100%;background:var(--andamento)" title="Em andamento"></div>
       </div>
       <div class="flex flex-wrap gap-2 mt-3">
-        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 representação eleitoral em andamento</span>
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>2 processos eleitorais em andamento</span>
       </div>
       <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
         <div class="marker-dot"></div>
         <p><span class="font-semibold">Contexto:</span> fundador do Movimento Brasil Livre (MBL) em 2014, Renan Santos ganhou notoriedade nas manifestações de 2013 e nos protestos que pediram o impeachment de Dilma Rousseff, em apoio à Operação Lava Jato. Em 2025, fundou o partido Missão, oficializado como sua legenda para a candidatura à Presidência em 2026.</p>
-        <p><span class="font-semibold">Marco central:</span> em julho de 2026, o diretório do Missão em Pernambuco foi alvo de uma representação no TRE-PE por um vídeo em que Renan Santos chama o pré-candidato João Campos de termos ofensivos; o processo, de natureza eleitoral, ainda tramitava em fase de contestação.</p>
-        <p><span class="font-semibold">Observação:</span> nas fontes públicas consultadas não foram identificados inquéritos criminais ou processos por corrupção associados ao seu nome até a data desta análise.</p>
+        <p><span class="font-semibold">Caso 1 (jul/2026):</span> o diretório do Missão em Pernambuco foi alvo de uma representação no TRE-PE por um vídeo em que Renan Santos chama o pré-candidato João Campos (PSB) de termos ofensivos; o processo, de natureza eleitoral, ainda tramitava em fase de contestação.</p>
+        <p><span class="font-semibold">Caso 2 (ago/2026, mais relevante):</span> o ministro do TSE Dias Toffoli determinou a retirada de pauta do julgamento do registro de candidatura de Renan Santos, apontando possíveis irregularidades — a chapa não teria informado, dentro do prazo, todos os 18 perfis em redes sociais usados na campanha. Na sequência, o TSE suspendeu a campanha digital, o acesso ao fundo eleitoral e a participação de Renan Santos em debates até o julgamento do mérito. A coordenação da campanha (Missão) classificou a decisão como desproporcional e informou que vai recorrer.</p>
       </div>
       <div class="mt-5 pt-4 border-t hairline">
         <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
-        <p class="text-sm">Sem condenação. Processo de natureza eleitoral (representação por conteúdo ofensivo a adversário) em fase de contestação, sem desfecho definitivo.</p>
+        <p class="text-sm">Sem condenação em nenhum dos dois casos. A candidatura segue formalmente registrada, mas com a campanha digital, o fundo eleitoral e a presença em debates suspensos por decisão monocrática, pendente de recurso.</p>
       </div>
     </article>
 
@@ -490,6 +509,47 @@
       </div>
     </article>
 
+    <!-- PABLO MARÇAL -->
+    <article class="candidate-card p-6" data-candidate="marcal">
+      <div class="flex items-start gap-4">
+        <!-- FOTO: substitua o placeholder abaixo pela foto oficial do candidato.
+             Exemplo: <img src="URL-DA-FOTO" alt="Foto de Pablo Marçal" class="photo-placeholder object-cover" style="background:none;"> -->
+        <div class="photo-placeholder" aria-hidden="true">PM</div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-display text-2xl font-semibold">Pablo Marçal</h3>
+              <p class="font-mono text-xs text-[#5a5647] mt-1">PRTB · empresário e influenciador digital · candidato à Presidência</p>
+            </div>
+            <div class="font-mono text-right">
+              <p class="text-3xl font-semibold leading-none text-[var(--navy)]">26</p>
+              <p class="text-[0.65rem] uppercase tracking-wider text-[#5a5647]">casos mapeados</p>
+            </div>
+          </div>
+          <p class="font-mono text-xs mt-2 text-[#3a3628]">Intenção de voto (1º turno): <span class="font-semibold text-[var(--navy)]">3%</span></p>
+        </div>
+      </div>
+      <div class="status-bar mt-4">
+        <div style="width:100%;background:var(--andamento)" title="Em andamento"></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>3 condenações por inelegibilidade (recurso)</span>
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>22 ações na Justiça Eleitoral</span>
+        <span class="status-badge" style="background:#F6E7E1;color:var(--andamento)"><span class="dot" style="background:var(--andamento)"></span>1 ação cível (R$ 51 milhões)</span>
+      </div>
+      <div class="mt-5 marker-line space-y-4 text-sm leading-relaxed text-[#2b2f37]">
+        <div class="marker-dot"></div>
+        <p><span class="font-semibold">Contexto:</span> ex-coach de desenvolvimento pessoal e influenciador digital, Marçal disputou a Prefeitura de São Paulo em 2024 e tentou eleger-se deputado/senador pelo União Brasil, sem sucesso; migrou de volta ao PRTB em agosto de 2026 para viabilizar a candidatura à Presidência.</p>
+        <p><span class="font-semibold">Condenações por inelegibilidade:</span> tem três condenações por abuso de poder político e econômico, uso indevido dos meios de comunicação social e captação e gastos ilícitos de recursos em eleições passadas — decisões que sua defesa ainda contesta nos tribunais.</p>
+        <p><span class="font-semibold">Registro de candidatura sub judice:</span> em agosto de 2026, o TSE concedeu liminar proibindo Marçal de usar recursos oficiais de campanha até o julgamento de mérito do registro de sua candidatura, após o Ministério Público Eleitoral questionar se a filiação ao PRTB cumpriu o prazo legal.</p>
+        <p><span class="font-semibold">Outros processos:</span> segundo levantamentos jornalísticos, Marçal também é alvo de inquéritos da Polícia Federal e da Polícia Civil de Piquete (SP), tem 22 ações abertas na Justiça Eleitoral e responde a uma ação cível de cerca de R$ 51 milhões movida por um advogado, na 2ª Vara Cível de Barueri. Em 2010, foi condenado por furto qualificado; a pena prescreveu antes de ser cumprida, pela demora do tribunal em julgar o caso.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t hairline">
+        <p class="font-mono text-[0.68rem] uppercase tracking-wider text-[#5a5647] mb-1">Status jurídico atual</p>
+        <p class="text-sm">Nenhuma condenação com trânsito em julgado até o momento. O maior número de casos entre os candidatos mapeados neste panorama está concentrado em ações eleitorais e cíveis ainda em andamento, incluindo o próprio registro de candidatura, hoje sub judice no TSE.</p>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -519,30 +579,30 @@
         <tr class="fade-row" data-candidate="flavio">
           <td class="font-semibold whitespace-nowrap">Flávio Bolsonaro <span class="block font-mono text-xs text-[#5a5647] font-normal">PL</span></td>
           <td class="font-mono">35%</td>
-          <td class="font-mono">1 caso ("rachadinha")</td>
-          <td>Denúncia do MP-RJ em 2020; anulação pelo STJ em 2021 por foro privilegiado; pedidos de reabertura negados em 2026.</td>
-          <td>Sem condenação; caso arquivado após anulação processual.</td>
+          <td class="font-mono">3 casos</td>
+          <td>"Rachadinha" (anulada em 2021); AIJE no TSE por suposto showmício em Barretos (ago/2026); ação sobre vídeos com IA.</td>
+          <td>Sem condenação; 2 representações de ago/2026 aguardam julgamento no TSE.</td>
         </tr>
         <tr class="fade-row" data-candidate="caiado">
           <td class="font-semibold whitespace-nowrap">Ronaldo Caiado <span class="block font-mono text-xs text-[#5a5647] font-normal">PSD</span></td>
           <td class="font-mono">4%</td>
-          <td class="font-mono">2 casos</td>
-          <td>Condenação em 1ª instância por abuso de poder político (dez/2024); mantida pelo TRE-GO; ação cível de Lula em 2015.</td>
-          <td>Em recurso no TSE; inelegibilidade de 8 anos não é definitiva.</td>
+          <td class="font-mono">3 casos</td>
+          <td>Condenação por abuso de poder político (dez/2024) revertida pelo TRE-GO (abr/2025); ação cível de 2015; nova representação no TSE (ago/2026).</td>
+          <td>Sem inelegibilidade em vigor; 1 caso novo aguarda decisão.</td>
         </tr>
         <tr class="fade-row" data-candidate="zema">
           <td class="font-semibold whitespace-nowrap">Romeu Zema <span class="block font-mono text-xs text-[#5a5647] font-normal">Novo</span></td>
           <td class="font-mono">2%</td>
-          <td class="font-mono">1 caso (cível)</td>
-          <td>Réu em ação por calúnia movida por Gilmar Mendes, após críticas públicas de Zema ao STF.</td>
-          <td>Ação cível em andamento; sem processos por corrupção identificados.</td>
+          <td class="font-mono">2 casos</td>
+          <td>Ação cível por calúnia movida por Gilmar Mendes; representação no TSE (ago/2026) por replicar vídeos com IA.</td>
+          <td>Sem condenação; ambos os casos em andamento.</td>
         </tr>
         <tr class="fade-row" data-candidate="renan">
           <td class="font-semibold whitespace-nowrap">Renan Santos <span class="block font-mono text-xs text-[#5a5647] font-normal">Missão</span></td>
           <td class="font-mono">4%</td>
-          <td class="font-mono">1 caso (eleitoral)</td>
-          <td>Representação no TRE-PE (jul/2026) por vídeo com ofensas a adversário; sem inquéritos criminais identificados.</td>
-          <td>Sem condenação; processo eleitoral em fase de contestação.</td>
+          <td class="font-mono">2 casos</td>
+          <td>Representação no TRE-PE (jul/2026); TSE suspendeu campanha digital, fundo eleitoral e debates por pendências no registro (ago/2026).</td>
+          <td>Sem condenação; candidatura registrada, mas com campanha parcialmente suspensa, pendente de recurso.</td>
         </tr>
         <tr class="fade-row" data-candidate="cury">
           <td class="font-semibold whitespace-nowrap">Augusto Cury <span class="block font-mono text-xs text-[#5a5647] font-normal">Avante</span></td>
@@ -550,6 +610,13 @@
           <td class="font-mono">0 casos identificados</td>
           <td>Estreante na política institucional; sem mandatos ou processos amplamente noticiados até a data desta análise.</td>
           <td>Nenhum processo ou inquérito de repercussão identificado nas fontes consultadas.</td>
+        </tr>
+        <tr class="fade-row" data-candidate="marcal">
+          <td class="font-semibold whitespace-nowrap">Pablo Marçal <span class="block font-mono text-xs text-[#5a5647] font-normal">PRTB</span></td>
+          <td class="font-mono">3%</td>
+          <td class="font-mono">26 casos</td>
+          <td>3 condenações por inelegibilidade (recurso); 22 ações na Justiça Eleitoral; ação cível de R$ 51 milhões; registro de candidatura sub judice no TSE.</td>
+          <td>Sem condenação com trânsito em julgado; maior volume de casos em andamento entre os candidatos mapeados.</td>
         </tr>
       </tbody>
     </table>
@@ -574,15 +641,18 @@
         <li>Distinção clara entre condenação com trânsito em julgado, anulação por vício processual, prescrição, arquivamento e processo em andamento.</li>
         <li>Nenhuma classificação de status implica juízo sobre culpa ou inocência.</li>
         <li>Casos de natureza distinta (criminal, eleitoral, cível) não são comparáveis em gravidade apenas pelo volume.</li>
-        <li>Fontes: reportagens de CNN Brasil, CartaCapital, Congresso em Foco, Poder360, Gazeta do Povo, JOTA, Terra, NSC Total, InfoMoney, A Pública e comunicados oficiais do STF/TSE, consultados em agosto de 2026.</li>
-        <li>Dados de intenção de voto: pesquisa PoderData/Aya, divulgada em 27/ago/2026 (registro TSE nº BR-04974/2026). Pesquisas eleitorais retratam um momento específico e variam conforme o instituto e a metodologia — os números tendem a mudar ao longo da campanha.</li>
+        <li>Fontes: reportagens de CNN Brasil, CartaCapital, Congresso em Foco, Poder360, Gazeta do Povo, JOTA, Terra, NSC Total, InfoMoney, A Pública, Exame, Revista Fórum, O Antagonista, Blog do Magno e comunicados oficiais do STF/TSE, consultadas até 6 de setembro de 2026.</li>
+        <li>Dados de intenção de voto: pesquisa PoderData/Aya, divulgada em 27/ago/2026 (registro TSE nº BR-04974/2026), a mais recente com números individuais de todos os candidatos mapeados até a data de checagem. Pesquisas eleitorais retratam um momento específico e variam conforme o instituto e a metodologia — os números tendem a mudar ao longo da campanha.</li>
+        <li>As representações eleitorais mais recentes (fim de agosto de 2026, incluindo os casos de Flávio Bolsonaro, Caiado, Zema e Renan Santos no TSE) ainda não tinham decisão de mérito publicada até a data desta atualização — o status pode ter mudado desde então.</li>
       </ul>
     </div>
   </div>
   <p class="text-xs text-[#5a5647] mt-4 max-w-3xl">
     Este é um portal informativo e não substitui consulta direta aos autos processuais ou aconselhamento jurídico.
     Situações judiciais mudam rapidamente durante o período eleitoral; recomenda-se verificar atualizações junto às
-    fontes oficiais dos tribunais citados. 
+    fontes oficiais dos tribunais citados. As fotos dos candidatos foram substituídas por iniciais como espaço reservado
+    (ver comentários <code>&lt;!-- FOTO: ... --&gt;</code> no código-fonte de cada card, logo acima de <code>photo-placeholder</code>);
+    para usá-las, insira a tag <code>&lt;img&gt;</code> indicada com a URL de uma foto oficial de cada candidato.
   </p>
 </section>
 
@@ -614,24 +684,61 @@
   </div>
 </footer>
 
+<!-- ===================== WIDGET FLUTUANTE: STATUS DO SITE + CONTADOR DE VISITAS ===================== -->
+<!--
+  Este widget faz duas coisas, ambas client-side (sem servidor próprio):
+
+  1) STATUS DO SITE: ao carregar, faz uma requisição HEAD para a própria URL da página.
+     Se responder OK, mostra "Site ativo" (bolinha verde); se falhar, mostra "Servidor
+     indisponível" (bolinha vermelha). ATENÇÃO: isso só funciona quando o arquivo está
+     hospedado em um servidor web real (http/https). Se você abrir o arquivo direto do
+     computador (file://), o navegador bloqueia esse tipo de requisição por segurança e
+     o status aparecerá como indisponível mesmo com o site "funcionando" localmente —
+     isso é uma limitação do navegador, não um defeito do site.
+
+  2) CONTADOR DE VISITAS ÚNICAS: usa a CountAPI (countapi.xyz), um serviço gratuito de
+     contagem sem necessidade de backend próprio.
+       - Na primeira visita do navegador, chama o endpoint /hit (incrementa +1) e grava
+         uma flag no localStorage para não contar o mesmo visitante de novo.
+       - Em visitas seguintes do mesmo navegador, chama o endpoint /get (só consulta o
+         total, sem incrementar).
+     LIMITAÇÃO IMPORTANTE: é uma contagem por navegador/dispositivo, não por pessoa —
+     modo anônimo, trocar de navegador ou limpar os dados do site geram uma nova
+     contagem. Para uma métrica de visitantes realmente confiável, o ideal é usar uma
+     ferramenta de analytics (Google Analytics, Plausible, Umami etc.).
+     Para usar um contador próprio (recomendado antes de publicar), troque o valor de
+     COUNTAPI_NAMESPACE abaixo por um nome único do seu site.
+-->
+<div id="floating-status-bar" class="fixed bottom-4 left-4 z-50 flex items-center gap-3 bg-[#1D3557] text-white font-mono text-[0.7rem] px-3.5 py-2.5 rounded-full" style="background:var(--navy)">
+  <span class="flex items-center gap-1.5">
+    <span id="site-status-dot" class="status-dot"></span>
+    <span id="site-status-label">Verificando status…</span>
+  </span>
+  <span class="opacity-30">|</span>
+  <span class="flex items-center gap-1.5">
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span id="visit-counter-value">—</span> visitas únicas
+  </span>
+</div>
+
 <script>
   // ---------- Dados agregados ----------
   const dataBarras = {
-    labels: ['Lula (PT)', 'Flávio Bolsonaro (PL)', 'Ronaldo Caiado (PSD)', 'Romeu Zema (Novo)', 'Renan Santos (Missão)', 'Augusto Cury (Avante)'],
-    values: [11, 1, 2, 1, 1, 0],
-    colors: ['#002776', '#3B6EA5', '#8A8578', '#FFCC29', '#A6432E', '#B0AA98']
+    labels: ['Pablo Marçal (PRTB)', 'Lula (PT)', 'Flávio Bolsonaro (PL)', 'Ronaldo Caiado (PSD)', 'Romeu Zema (Novo)', 'Renan Santos (Missão)', 'Augusto Cury (Avante)'],
+    values: [26, 11, 3, 3, 2, 2, 0],
+    colors: ['#7A1F3D', '#002776', '#3B6EA5', '#8A8578', '#FFCC29', '#A6432E', '#B0AA98']
   };
 
   const dataRosca = {
-    labels: ['Arquivado / prescrito', 'Suspenso, sem condenação definitiva', 'Anulado por vício processual', 'Em andamento / recurso'],
-    values: [8, 4, 1, 3],
-    colors: ['#4C7A5E', '#B8862B', '#8A8578', '#A6432E']
+    labels: ['Arquivado / prescrito', 'Suspenso, sem condenação definitiva', 'Anulado por vício processual', 'Revertido em instância superior', 'Em andamento / recurso'],
+    values: [8, 4, 1, 1, 33],
+    colors: ['#4C7A5E', '#B8862B', '#8A8578', '#2F7A99', '#A6432E']
   };
 
   const dataVotos = {
-    labels: ['Lula (PT)', 'Flávio Bolsonaro (PL)', 'Ronaldo Caiado (PSD)', 'Renan Santos (Missão)', 'Augusto Cury (Avante)', 'Romeu Zema (Novo)'],
-    values: [38, 35, 4, 4, 4, 2],
-    colors: ['#002776', '#3B6EA5', '#8A8578', '#A6432E', '#B0AA98', '#FFCC29']
+    labels: ['Lula (PT)', 'Flávio Bolsonaro (PL)', 'Ronaldo Caiado (PSD)', 'Renan Santos (Missão)', 'Augusto Cury (Avante)', 'Pablo Marçal (PRTB)', 'Romeu Zema (Novo)'],
+    values: [38, 35, 4, 4, 4, 3, 2],
+    colors: ['#002776', '#3B6EA5', '#8A8578', '#A6432E', '#B0AA98', '#7A1F3D', '#FFCC29']
   };
 
   const ctxBarras = document.getElementById('chartBarras').getContext('2d');
@@ -651,7 +758,7 @@
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, ticks: { stepSize: 2, font: { family: 'IBM Plex Mono', size: 11 } }, grid: { color: '#E4E0D4' } },
+        y: { beginAtZero: true, ticks: { font: { family: 'IBM Plex Mono', size: 11 } }, grid: { color: '#E4E0D4' } },
         x: { ticks: { font: { family: 'IBM Plex Mono', size: 10 } }, grid: { display: false } }
       }
     }
@@ -724,6 +831,66 @@
       });
     });
   });
+
+  // ---------- Widget flutuante: status do site ----------
+  (function checkSiteStatus() {
+    const dot = document.getElementById('site-status-dot');
+    const label = document.getElementById('site-status-label');
+    function setStatus(isActive) {
+      if (!dot || !label) return;
+      if (isActive) {
+        dot.style.background = '#4C7A5E';
+        label.textContent = 'Site ativo';
+      } else {
+        dot.style.background = '#A6432E';
+        dot.style.animation = 'none';
+        label.textContent = 'Servidor indisponível';
+      }
+    }
+    try {
+      fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
+        .then(res => setStatus(res.ok))
+        .catch(() => setStatus(false));
+    } catch (e) {
+      setStatus(false);
+    }
+  })();
+
+  // ---------- Widget flutuante: contador de visitas únicas (CountAPI) ----------
+  (function visitCounter() {
+    const COUNTAPI_NAMESPACE = 'panorama-presidencial-2026'; // troque por um nome único do seu site
+    const COUNTAPI_KEY = 'visitas-unicas';
+    const VISITED_FLAG = 'ppa2026_visited_v1';
+    const valueEl = document.getElementById('visit-counter-value');
+
+    function showCount(n) {
+      if (valueEl) valueEl.textContent = Number(n).toLocaleString('pt-BR');
+    }
+    function localFallback() {
+      try {
+        const n = parseInt(localStorage.getItem('ppa2026_local_count') || '0', 10) + 1;
+        localStorage.setItem('ppa2026_local_count', String(n));
+        showCount(n);
+      } catch (e) {
+        if (valueEl) valueEl.textContent = '—';
+      }
+    }
+    try {
+      const alreadyVisited = localStorage.getItem(VISITED_FLAG);
+      const action = alreadyVisited ? 'get' : 'hit';
+      const endpoint = `https://api.countapi.xyz/${action}/${COUNTAPI_NAMESPACE}/${COUNTAPI_KEY}`;
+      fetch(endpoint)
+        .then(res => res.json())
+        .then(data => {
+          if (!alreadyVisited) localStorage.setItem(VISITED_FLAG, '1');
+          showCount(data.value);
+        })
+        .catch(localFallback);
+    } catch (e) {
+      // localStorage indisponível (ex.: modo privado restrito) — mantém o traço no contador
+      if (valueEl) valueEl.textContent = '—';
+    }
+  })();
 </script>
 </body>
 </html>
